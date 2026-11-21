@@ -11,8 +11,8 @@
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |Đặng Long Nhật|2A202603483|nhatlong12cc@gmail.com|        |         |
-|   2 |        |      |       |        |         |
+| 1 | Đặng Long Nhật | 2A202603483 | nhatlong12cc@gmail.com | | TV1 · Người viết code A–B |
+| 2 | Nguyễn Trường Thành | 2A202603512 | 26ai.thanhnt6@vinuni.edu.vn | Thanhnt-da | TV2 · Kiểm số, gắn nhãn 1 và viết code CP4 |
 |   3 | Nguyễn Lâm Hoàng | 2A202603448 | 26ai.hoangnl@vinuni.edu.vn |        | Người gắn nhãn 2 kiêm giữ hồ sơ |
 
 Bốn vai của lab:
@@ -83,3 +83,8 @@ Sao chép mục dưới đây cho từng thành viên.
 ### Bằng chứng
 
 - [Đặc tả chỉ số](report/team/chi_so.md), [hồ sơ launch](report/team/ho_so_launch_v0.md), [báo cáo nhóm](report/team/group_report.md) và [báo cáo cá nhân](report/team/2A202603448_NguyenLamHoang.md).
+
+## Nguyễn Trường Thành-2A202603512
+
+- Kiểm tay A2, gắn nhãn 20 ca và xây dựng kế hoạch pilot D1–D3.
+- [Báo cáo cá nhân](report/team/2A202603512_NguyenTruongThanh.md) · [Bảng nhãn](report/team/tv2_nhan_AI_claude.md) · [Kế hoạch pilot](report/team/pilot_plan.yaml).

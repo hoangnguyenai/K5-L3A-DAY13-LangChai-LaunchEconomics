@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LogiX-VN · Pilot hoàn phí</title>
+<meta name="description" content="Demo quy trình hoàn phí LogiX-VN cho Gate 2a trên dữ liệu giả lập.">
+<meta name="theme-color" content="#102c28">
+<link rel="stylesheet" href="styles.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">LX</span><div><strong>LogiX<span>-VN</span></strong><small>Vận hành CSKH</small></div></div>
+    <nav aria-label="Điều hướng chính">
+      <button class="nav-button active" data-view="queue" aria-current="page"><span aria-hidden="true">▤</span> Yêu cầu hoàn phí</button>
+      <button class="nav-button" data-view="metrics"><span aria-hidden="true">▥</span> Chỉ số pilot</button>
+      <button class="nav-button" data-view="rules"><span aria-hidden="true">◇</span> Quy tắc an toàn</button>
+    </nav>
+    <div class="sidebar-footer"><span class="gate">Gate 2a</span><strong>Demo nội bộ</strong><small>Dữ liệu giả lập · LangChai</small></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><span>Trợ lý hoàn phí</span><div><span class="demo-pill"><i></i> Mô phỏng</span><button id="reset" class="button ghost">Đặt lại demo</button></div></header>
+    <section id="queue" class="view">
+      <div class="heading"><div><h1>Yêu cầu hoàn phí</h1><p>Xem gợi ý, kiểm tra phạm vi và xử lý yêu cầu.</p></div><button id="new-case" class="button primary">+ Tạo yêu cầu</button></div>
+      <section class="summary" aria-label="Chỉ số đợt chạy thử">
+        <article><p>Đóng đúng hạn</p><strong>82,83<span>%</span></strong><small>994 / 1.200 yêu cầu</small></article>
+        <article><p>Gợi ý bị sửa hoặc bỏ</p><strong>27,12<span>%</span></strong><small>48 / 177 lượt xem lại</small></article>
+        <article><p>Mở lại trong 7 ngày</p><strong>4,25<span>%</span></strong><small>51 / 1.200 yêu cầu</small></article>
+      </section>
+      <div class="workspace">
+        <section class="panel queue-panel" aria-labelledby="queue-title">
+          <div class="panel-title"><h2 id="queue-title">Hàng đợi</h2><span class="quiet" id="case-count"></span></div>
+          <div class="filters"><input type="search" id="search" placeholder="Tìm mã hoặc tên yêu cầu" aria-label="Tìm yêu cầu"><select id="filter" aria-label="Lọc trạng thái"><option value="all">Tất cả trạng thái</option><option value="review">Chờ xem lại</option><option value="handoff">Chuyển CSKH</option><option value="done">Đã hoàn</option><option value="rejected">Đã từ chối</option></select></div>
+          <div id="case-list" class="case-list"></div>
+        </section>
+        <section class="panel detail-panel" id="detail" aria-label="Chi tiết yêu cầu"></section>
+      </div>
+    </section>
+    <section id="metrics" class="view" hidden>
+      <div class="heading"><div><h1>Chỉ số pilot</h1><p>Kết quả quan sát trên 1.200 yêu cầu giả lập.</p></div></div>
+      <section class="panel section-card">
+        <h2>Kết quả chạy thử</h2>
+        <div class="metric-row"><div><strong>Đóng trong 24 giờ, không mở lại trong 7 ngày</strong><span>994 / 1.200</span></div><meter min="0" max="100" value="82.83" aria-label="Đóng đúng hạn 82,83 phần trăm"></meter><b>82,83%</b></div>
+        <div class="metric-row"><div><strong>Gợi ý bị sửa hoặc bỏ</strong><span>48 / 177</span></div><meter min="0" max="100" value="27.12" aria-label="Gợi ý bị sửa hoặc bỏ 27,12 phần trăm"></meter><b>27,12%</b></div>
+        <div class="metric-row"><div><strong>Mở lại trong 7 ngày</strong><span>51 / 1.200</span></div><meter min="0" max="100" value="4.25" aria-label="Mở lại 4,25 phần trăm"></meter><b>4,25%</b></div>
+      </section>
+      <section class="panel section-card plan"><div><span>THIẾT KẾ PILOT</span><h2>Đối chứng theo nhân viên</h2></div><div><strong>20 + 20</strong><small>nhân viên</small></div><div><strong>859</strong><small>yêu cầu hiệu dụng mỗi nhóm</small></div><div><strong>6 điểm</strong><small>mức chênh lệch thiết kế</small></div></section>
+    </section>
+    <section id="rules" class="view" hidden>
+      <div class="heading"><div><h1>Quy tắc an toàn</h1><p>Điều kiện để một khoản hoàn được xử lý trong pilot.</p></div></div>
+      <div class="rule-grid">
+        <article class="panel section-card"><span class="badge good">Phạm vi</span><h2>Nội địa và hàng nặng</h2><p>Yêu cầu quốc tế và đối tác được chuyển CSKH. Luồng chuyển giữ mã yêu cầu và lý do để truy vết.</p></article>
+        <article class="panel section-card"><span class="badge wait">Kiểm soát</span><h2>Nhân viên duyệt gợi ý</h2><p>Nhân viên có thể giữ, sửa số tiền, từ chối hoặc chuyển yêu cầu. Mọi quyết định được ghi trong nhật ký.</p></article>
+        <article class="panel section-card"><span class="badge good">Sổ cái</span><h2>Một giao dịch trên mỗi yêu cầu</h2><p>Trạng thái “Đã hoàn” chỉ xuất hiện sau khi sổ cái ghi thành công. Khi ghi lỗi, yêu cầu được chuyển CSKH.</p></article>
+        <article class="panel section-card"><span class="badge wait">Ngưỡng dừng</span><h2>Theo dõi mở lại và hoàn trùng</h2><p>Dừng khi có ca hoàn trùng hoặc báo hoàn thiếu bản ghi. Theo dõi trần mở lại 6% và chênh 2 điểm phần trăm so với đối chứng.</p></article>
+      </div>
+    </section>
+  </main>
+</div>
+<dialog id="create-dialog">
+  <form id="create-form">
+    <div class="panel-title"><h2>Tạo yêu cầu mô phỏng</h2><button class="icon-button" type="button" id="close-dialog" aria-label="Đóng">×</button></div>
+    <label>Loại yêu cầu<select name="type"><option value="domestic">Nội địa</option><option value="heavy">Hàng nặng</option><option value="international">Quốc tế</option><option value="partner">Đối tác</option></select></label>
+    <label>Phí vận chuyển (đ)<input name="fee" type="number" min="1000" max="100000000" value="60000" required></label>
+    <label>Tình huống sổ cái<select name="ledger"><option value="ok">Ghi thành công</option><option value="error">Lỗi 503 khi ghi</option></select></label>
+    <button class="button primary" type="submit">Thêm vào hàng đợi</button>
+  </form>
+</dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>
