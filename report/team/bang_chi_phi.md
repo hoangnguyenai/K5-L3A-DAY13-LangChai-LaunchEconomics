@@ -80,3 +80,20 @@ Số tính bằng `src/lab13.py`. Mọi con số tính từ cột `_simulated` g
 
 - Chi phí mỗi việc thành công khi xem lại 100% (`noi_dia` + `hang_nang`), so với 12.000 đ: ...
 - Kết quả này nói gì về thứ pilot cần học được? ...
+
+## Kiểm tay A2 (TV2 · người kiểm số)
+
+Tính độc lập từ hai file CSV, không dùng code của TV1.
+
+| Bước | Cách tính | Kết quả |
+| --- | --- | ---: |
+| Token | Σ(tokens_in/1000 × 26 + tokens_out/1000 × 130) trên **mọi** 1.624 lần chạy, kể cả status = loi | 245.585 đ |
+| Tool | Σ tool_calls × 15 | 84.000 đ |
+| Xem lại | Σ phut_xem_lai_simulated × 2.000 | 1.780.000 đ (simulated) |
+| Làm lại | Σ phut_lam_lai_simulated × 2.000 | 2.264.000 đ (simulated) |
+| Tổng | cộng bốn khoản | 4.373.585 đ (simulated) |
+| Số việc thành công | đếm ket_qua == 'thanh_cong' (không chia 1.200) | 978 |
+| Chi phí mỗi việc thành công | 4.373.585 ÷ 978 | 4.472 đ (simulated) |
+
+- Lệch so với A2 của TV1: ...% (ngưỡng 2%). Kết luận: ...
+- So với nhân viên tự làm: (4.373.585 + 222 yêu cầu không thành công × 12.000) ÷ 1.200 = 5.865 đ/yêu cầu = 0,49× của 12.000 đ (simulated).
