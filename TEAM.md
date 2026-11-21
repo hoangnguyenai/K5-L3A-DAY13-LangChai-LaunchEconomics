@@ -86,5 +86,23 @@ Sao chép mục dưới đây cho từng thành viên.
 
 ## Nguyễn Trường Thành-2A202603512
 
-- Kiểm tay A2, gắn nhãn 20 ca và xây dựng kế hoạch pilot D1–D3.
-- [Báo cáo cá nhân](report/team/2A202603512_NguyenTruongThanh.md) · [Bảng nhãn](report/team/tv2_nhan_AI_claude.md) · [Kế hoạch pilot](report/team/pilot_plan.yaml).
+### Phần việc phụ trách
+
+- TV2 · Người kiểm số: kiểm cách đọc CSV (`keep_default_na=False`), tính tay độc lập một kết quả A2 và đối chiếu bảng A/B của TV1.
+- Người gắn nhãn 1 ở CP3: gắn nhãn 20 ca lỗi theo nguyên nhân gốc, có AI hỗ trợ (Claude Opus 5.5) và cột lý do AI theo yêu cầu của TA.
+- Viết code CP4 sau giờ giải lao: D1 (cỡ mẫu) trong `src/lab13.py` và kế hoạch pilot `report/team/pilot_plan.yaml`; trả lời phần đối chứng, cỡ mẫu và luật dừng khi bảo vệ, chấm C8 khi duyệt chéo.
+
+### Đóng góp cụ thể
+
+- Tính tay A2: tổng 4.373.585 đ / 978 việc thành công = 4.472 đ (`simulated`), lệch 0% so với 4.471,97 đ của TV1; chi phí cả hệ thống 5.865 đ/yêu cầu = 0,49× mốc 12.000 đ (`simulated`).
+- Gắn đủ 20 nhãn, tự rà từng ca và chốt nhãn; khác gợi ý AI ở ca 3 và ca 8. Đối chiếu với TV3 trùng 18/20 ca.
+- Viết D1: chia theo yêu cầu 1.251/nhóm; theo nhân viên m = 75 cần 84 NV > 40; trần 20 NV/nhóm là 1.000 và 6 depot/nhóm là 300; MDE +6 điểm cần 859/nhóm, m ≥ 299 yêu cầu/NV, DE 6,96, power ~0,64 nếu tác động thật +5 điểm. Tính tỉ lệ mở lại 7 ngày 4,25% toàn mẫu, 3,97% trong phạm vi pilot.
+- Hoàn thiện `pilot_plan.yaml`: chia theo nhân viên 20 + 20 phân tầng theo depot, phạm vi `noi_dia` + `hang_nang`, đánh đổi MDE +6 điểm, luật dừng an toàn, chi phí và sử dụng đủ 4 vế NẾU – TRONG – THÌ – KHÔNG THÌ, rollback trong 30 phút.
+
+### Bằng chứng
+
+- [`5c03335`](https://github.com/hoangnguyenai/K5-L3A-DAY13-LangChai-LaunchEconomics/commit/5c03335) · Mục "Kiểm tay A2" trong [bảng chi phí](report/team/bang_chi_phi.md).
+- [`991df51`](https://github.com/hoangnguyenai/K5-L3A-DAY13-LangChai-LaunchEconomics/commit/991df51) · [Bảng nhãn TV2](report/team/tv2_nhan_AI_claude.md) và [prompt cho AI](report/team/tv2_prompt_gan_nhan_AI.md).
+- [`ab29e94`](https://github.com/hoangnguyenai/K5-L3A-DAY13-LangChai-LaunchEconomics/commit/ab29e94) · Code D1 trong [`src/lab13.py`](src/lab13.py).
+- [`cd90764`](https://github.com/hoangnguyenai/K5-L3A-DAY13-LangChai-LaunchEconomics/commit/cd90764) · [Kế hoạch pilot](report/team/pilot_plan.yaml).
+- [Báo cáo cá nhân](report/team/2A202603512_NguyenTruongThanh.md).
