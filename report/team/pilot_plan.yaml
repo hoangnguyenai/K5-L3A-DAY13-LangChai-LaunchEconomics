@@ -7,7 +7,7 @@
 #
 # D2 · Năm câu kiểm tra "tách được tác động" với cách chia đã chọn (theo nhân viên, 20 + 20):
 #   1. Đối chứng chạy cùng thời gian: Có, 20 nhân viên đối chứng làm việc cùng tuần và cùng depot với nhóm trợ lý.
-#   2. Chia ngẫu nhiên hay do người chọn: Ngẫu nhiên bằng code với seed chốt trước, phân tầng theo 12 depot.
+#   2. Chia ngẫu nhiên hay do người chọn: Ngẫu nhiên bằng code với seed chốt trước, phân tầng theo các depot bố trí được cả hai nhóm.
 #   3. Ảnh hưởng gián tiếp và cách giảm: Có rủi ro chia sẻ câu trả lời trong depot; giảm bằng phân quyền theo staff_id và log lượt mở trợ lý theo tài khoản.
 #   4. Chỉ số chính, ngưỡng, ngày quyết định đã viết trước: Có, toàn bộ chỉ số chính, MDE, luật dừng và ngày quyết định chốt trước khi mở pilot.
 #   5. Ít nhất 20 cụm mỗi nhóm: Có, đúng 20 nhân viên mỗi nhóm.
@@ -55,6 +55,16 @@ pilot:
     clusters_per_arm: 20
     analysis: So sánh theo nhóm được phân ban đầu, kể cả khi nhân viên không mở trợ lý. Ước lượng chênh lệch và khoảng tin cậy 95% có hiệu chỉnh cụm theo nhân viên. Nếu số yêu cầu từng
       cụm mất cân bằng, kiểm tra lại cỡ mẫu hiệu dụng trước khi kết luận.
+  sample_feasibility:
+    owner: Giám đốc vận hành LogiX-VN
+    required_workers_per_arm: 20
+    observation_window_days: 14
+    preflight_source: Đếm request_id đủ điều kiện theo staff_id và depot trong 14 ngày lịch sử tương ứng với ca làm dự kiến. Lập bảng cho 40 nhân viên thuộc các depot tham gia, kể cả người có 0 yêu cầu.
+    effective_sample_formula: "Với m_i là số yêu cầu của nhân viên i, n_eff = tong(m_i) / (1 + ICC × (tong(m_i^2) / tong(m_i) - 1)), ICC = 0,02. Dùng công thức cho từng nhóm riêng."
+    baseline_sample: "CSV giả lập có 982 yêu cầu trong phạm vi, thuộc 20 nhân viên quan sát được. Số yêu cầu mỗi nhân viên từ 39 đến 73, trung vị 47,5."
+    planning_scenario: "Giả sử mỗi nhóm có mức mất cân bằng như mẫu, lưu lượng là 1.500 yêu cầu/ngày và tỷ trọng đủ điều kiện là 982/1.200. Với 100% lưu lượng dự kiến, mỗi nhóm có khoảng 8.593 yêu cầu thô và 880 hiệu dụng trong 14 ngày. Với 70% lưu lượng, mỗi nhóm có khoảng 6.015 thô và 844 hiệu dụng. Tất cả là dự phóng trên dữ liệu giả lập."
+    qualification: "Chỉ mở kỳ đo chính khi dự báo theo danh sách thực tế cho thấy cả hai nhóm có đủ 20 nhân viên và đạt tối thiểu 859 yêu cầu hiệu dụng. Mốc 5.980 yêu cầu thô áp dụng khi các cụm cân bằng. Với mức lệch của mẫu, mốc dự kiến là 6.900 yêu cầu thô mỗi nhóm."
+    insufficient_volume: "Nếu dự báo thiếu mẫu, giữ nguyên phân nhóm đối chứng và can thiệp, kéo dài kỳ đo theo tốc độ của nhóm thấp hơn. Kịch bản 70% cần ít nhất 17 ngày và thêm 8 ngày theo dõi sau ngày nhận ca cuối. Giám đốc vận hành phê duyệt lại lịch. Nếu chưa đủ mẫu hoặc theo dõi, ghi kết quả chưa đủ bằng chứng."
   identifiability:
     concurrent_control: Đối chứng tự xử lý trong cùng thời gian, với cùng tiêu chí nhận yêu cầu và cùng định nghĩa kết quả.
     spillover_risk: Nhân viên có thể chia sẻ gợi ý trong cùng depot. Giới hạn quyền theo tài khoản, ghi staff_id khi mở trợ lý, và ghi nhận chuyển yêu cầu giữa các nhóm.

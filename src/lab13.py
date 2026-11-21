@@ -167,6 +167,37 @@ def in_mo_lai(reqs, reqs_pilot):
     )
 
 
+def co_mau_hieu_dung(so_yeu_cau, icc):
+    tong = sum(so_yeu_cau)
+    if tong == 0:
+        return 0.0
+    de = 1 + icc * (sum(so_ca ** 2 for so_ca in so_yeu_cau) / tong - 1)
+    return tong / de
+
+
+def in_du_bao_luu_luong(reqs, reqs_pilot):
+    so_ca = reqs_pilot.groupby("staff_id")["request_id"].nunique()
+    ty_trong = so_ca / so_ca.sum()
+    icc, n_muc_tieu, so_ngay = 0.02, co_mau(0.70, 0.76), 14
+    luu_luong_ngay = 1500 * len(reqs_pilot) / len(reqs) / 2
+    bien = 1 - n_muc_tieu * icc * (ty_trong ** 2).sum()
+    if bien <= 0:
+        print("D2: Cơ cấu cụm trong mẫu có trần hiệu dụng dưới hoặc bằng mục tiêu.")
+        return
+    tong_can = ceil(n_muc_tieu * (1 - icc) / bien)
+    print("\nD2 - Kịch bản lưu lượng theo phân bố nhân viên trong mẫu giả lập")
+    print(f"Mẫu: {so_ca.sum()} ca đủ điều kiện, {len(so_ca)} nhân viên, "
+          f"min/trung vị/max = {so_ca.min()}/{so_ca.median():g}/{so_ca.max()}")
+    for ty_le_tiep_can in (1.0, 0.7):
+        du_bao_ngay = luu_luong_ngay * ty_le_tiep_can
+        du_bao = ty_trong * du_bao_ngay * so_ngay
+        print(f"{ty_le_tiep_can:.0%} lưu lượng: {du_bao.sum():,.2f} ca thô/nhóm, "
+              f"{co_mau_hieu_dung(du_bao, icc):,.2f} ca hiệu dụng/nhóm; "
+              f"cần ít nhất {ceil(tong_can / du_bao_ngay)} ngày ở cùng tốc độ")
+    print(f"Với phân bố mẫu: 5.980 ca thô cho {co_mau_hieu_dung(ty_trong * 5980, icc):.2f} ca hiệu dụng; "
+          f"cần {tong_can:,} ca thô để đạt {n_muc_tieu} hiệu dụng mỗi nhóm")
+
+
 def main():
     src = Path(__file__).parent
     runs = pd.read_csv(src / 'logix_runs.csv')
@@ -265,6 +296,7 @@ def main():
               f"hòa vốn {hoa_von:.2f} phút xem lại")
 
     in_co_mau()
+    in_du_bao_luu_luong(reqs, reqs_pilot)
     in_mo_lai(reqs, reqs_pilot)
 
     xem_lai = reqs.loc[reqs["duoc_xem_lai"].eq(1)]

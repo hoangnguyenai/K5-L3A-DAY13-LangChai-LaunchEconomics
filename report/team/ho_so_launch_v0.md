@@ -15,7 +15,7 @@ Nhóm: LangChai · Lớp: L3A
 Điều kiện trước khi mở pilot:
 
 - **27/11/2026** — PM trợ lý hoàn phí kiểm đủ hai bộ nhãn cho 20 ca và 5 phương án khắc phục. Kỹ sư trưởng agent kiểm thử gửi lại yêu cầu, với ngưỡng 0 giao dịch hoàn trùng và 0 thông báo thành công thiếu bản ghi sổ cái.
-- **27/11/2026** — Giám đốc vận hành kiểm lưu lượng đủ điều kiện theo nhân viên. Mục tiêu 5.980 yêu cầu thô mỗi nhóm trong 14 ngày, khoảng 427 yêu cầu/ngày/nhóm. Duyệt phân nhóm 20/20 và mức chênh thiết kế 6 điểm.
+- **27/11/2026** — Giám đốc vận hành duyệt 20/20 nhân viên và xác minh mỗi nhóm đạt 859 yêu cầu hiệu dụng theo lưu lượng từng người. Với độ lệch của mẫu, cần khoảng 6.900 yêu cầu thô/nhóm. Kịch bản thu được 70% lưu lượng dự kiến chỉ đạt 844 hiệu dụng sau 14 ngày và cần ít nhất 17 ngày đo (dự phóng trên dữ liệu giả lập). [Kiểm cỡ mẫu](pilot_plan.yaml)
 - **30/11/2026** — Trưởng nhóm CSKH kiểm event kết quả ở cả hai nhóm và bật đo phút thực tế. Chỉ giảm mức xem lại theo bậc khi đạt ngưỡng an toàn trong kế hoạch pilot. Ngưỡng hòa vốn B4 là 4,80 phút xem lại ở kịch bản 15,3 phút làm lại (simulated).
 
 **Đề xuất Gate 2a:** Go có điều kiện cho pilot `noi_dia` và `hang_nang`.
