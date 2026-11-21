@@ -22,9 +22,13 @@ Trong đợt chạy thử giả lập, 994/1.200 yêu cầu (82,83%) đóng tron
 
 Đề xuất Gate 2a là **Go có điều kiện** cho nội địa và hàng nặng. [Hồ sơ launch](ho_so_launch_v0.md)
 
+**Phản hồi từ ABCD.** C8 được **5/10**. Hội đồng ghi nhận đối chứng đồng thời, 20 nhân viên mỗi nhóm và 4 luật dừng. Điểm còn thiếu là lưu lượng đủ điều kiện theo từng nhân viên để xác minh cỡ mẫu hiệu dụng trong 14 ngày. [Phiếu ABCD chấm LangChai](https://github.com/blueT52Hz/K5-L3A-DAY13-ABCD-LaunchEconomics/blob/31d14c2fcd2491cbc88436ff429fe57469ceedd5/report/team/phieu_cham.md)
+
 ## 5. Khó khăn và cách xử lý
 
 Nếu phải xem lại 100% gợi ý, chi phí có thể tăng tới 12.414,50 đ/việc thành công (simulated). Pilot đo phút xem lại và làm lại từ tuần đầu, đồng thời theo dõi mở lại và đối soát hoàn phí. [Kịch bản B4](bang_chi_phi.md#b4--nếu-phải-xem-lại-tất-cả)
+
+Trong mẫu giả lập, 20 nhân viên có từ **39 đến 73** yêu cầu đủ điều kiện. Nếu giữ độ lệch lưu lượng này, **5.980** yêu cầu thô chỉ tương đương **843** hiệu dụng. Mô hình dự phóng cần khoảng **6.900** yêu cầu thô/nhóm để đạt **859** hiệu dụng. Giám đốc vận hành áp dụng điều kiện mở kỳ đo dựa trên lưu lượng của danh sách nhân viên thực tế. [Kế hoạch pilot](pilot_plan.yaml)
 
 ## 6. Tổng hợp đóng góp
 
