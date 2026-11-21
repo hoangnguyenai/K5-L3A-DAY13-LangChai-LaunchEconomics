@@ -11,10 +11,9 @@
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
+|   1 |Đặng Long Nhật|2A202603483|nhatlong12cc@gmail.com|        |         |
 |   2 |        |      |       |        |         |
 |   3 |        |      |       |        |         |
-|   4 |        |      |       |        |         |
 
 Bốn vai của lab:
 
