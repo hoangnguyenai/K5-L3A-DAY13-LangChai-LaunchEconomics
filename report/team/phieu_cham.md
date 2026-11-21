@@ -28,3 +28,18 @@ Nhóm số n chấm nhóm số n + 1; nhóm cuối chấm nhóm 1. Chấm theo b
 **Câu hỏi luyện bảo vệ:** Nếu tới ngày chốt kỳ đo mà một nhóm chưa đạt 859 yêu cầu hiệu dụng, đội sẽ xử lý thế nào?
 
 **Trả lời dự kiến:** Kiểm lại cỡ mẫu hiệu dụng dựa trên phân bố yêu cầu theo nhân viên. Nếu còn thiếu, Giám đốc vận hành duyệt kéo dài kỳ đo, giữ phân nhóm và theo dõi đủ 7 ngày sau khi đóng yêu cầu trước khi kết luận.
+
+## Chấm tham khảo nhóm ABCD
+
+Hồ sơ ABCD · L3A, commit `aa1a075`. [Hồ sơ launch](https://github.com/blueT52Hz/K5-L3A-DAY13-ABCD-LaunchEconomics/blob/aa1a075f1170a9364ac2d402e07302a43b9d4027/report/team/ho_so_launch_v0.md)
+
+| Tiêu chí | Điểm | Căn cứ |
+| --- | ---: | --- |
+| C6 · Đề xuất khớp bằng chứng | 10/10 | Go có điều kiện phù hợp với số liệu. Kịch bản xem lại 100% có thể tốn **12.415 đ/việc thành công** (`simulated`), vượt mốc **12.000 đ**. Nhóm đặt mục tiêu xem lại **≤ 4,80 phút/ca** và đo phút thực tế từ tuần 1. [Hồ sơ launch](https://github.com/blueT52Hz/K5-L3A-DAY13-ABCD-LaunchEconomics/blob/aa1a075f1170a9364ac2d402e07302a43b9d4027/report/team/ho_so_launch_v0.md) |
+| C7 · Số giả lập và phạm vi | 5/10 | Phạm vi chỉ gồm nội địa (**0,22×**) và hàng nặng (**0,69×**); quốc tế ở **1,88×** mốc tự làm (`simulated`). Cột **Thay đổi (%)** ở B1 còn thiếu nhãn `simulated`, ví dụ mức **+51,8%** khi số ca làm lại tăng gấp đôi. Hồ sơ nên ghi thêm lý do loại đối tác khi chi phí là **0,85×** và tỷ lệ thành công **54,4%**. [A3 và B1](https://github.com/blueT52Hz/K5-L3A-DAY13-ABCD-LaunchEconomics/blob/aa1a075f1170a9364ac2d402e07302a43b9d4027/report/team/bang_chi_phi.md) |
+| C8 · Pilot ra được quyết định | 10/10 | Có đối chứng đồng thời, chia ngẫu nhiên **20/20 nhân viên** và đặt mục tiêu **5.980 yêu cầu thô/nhóm**, tương đương **859 hiệu dụng**. Kế hoạch có **4 luật dừng**. Luật mở lại dùng trần **6%** hoặc chênh ít nhất **2 điểm phần trăm** trong **3 ngày kiểm tra liên tiếp**, với Giám đốc vận hành có quyền tắt trong **30 phút**. [Kế hoạch pilot](https://github.com/blueT52Hz/K5-L3A-DAY13-ABCD-LaunchEconomics/blob/aa1a075f1170a9364ac2d402e07302a43b9d4027/report/team/pilot_plan.yaml) |
+| **Tổng** | **25/30** | |
+
+**Đề xuất tham khảo:** Go có điều kiện. Chốt ngưỡng và quyền dừng riêng cho hàng nặng trước khi bật loại này. Mẫu của ABCD có tỷ lệ mở lại hàng nặng **13/158 = 8,23%**, trong khi tỷ lệ gộp nội địa và hàng nặng là **39/982 = 3,97%**. [Chỉ số an toàn](https://github.com/blueT52Hz/K5-L3A-DAY13-ABCD-LaunchEconomics/blob/aa1a075f1170a9364ac2d402e07302a43b9d4027/report/team/chi_so.md)
+
+**Câu hỏi cho đội trình:** Nếu hàng nặng tiếp tục mở lại trên **6%** trong khi tỷ lệ gộp vẫn dưới ngưỡng, nhóm dùng quy tắc nào để tạm dừng riêng hàng nặng và ai có quyền quyết định?
