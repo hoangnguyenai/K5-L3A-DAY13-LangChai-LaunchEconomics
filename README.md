@@ -82,6 +82,10 @@ Trong lúc làm: [docs/Lab13_Huong_dan_chi_tiet_buoi_chieu.md](docs/Lab13_Huong_
 
 Chi tiết: [SUBMISSION.md](SUBMISSION.md).
 
+## Demo pilot hoàn phí
+
+[Mở UI demo](demo/dist/index.html) để thử duyệt hoàn phí, chuyển yêu cầu ngoài phạm vi và kiểm tra chặn hoàn trùng. [Các tình huống demo](demo/README.md)
+
 ## Tài liệu tham khảo
 
 - Erol và cộng sự, *Cost-of-Pass: An Economic Framework for Evaluating Language Models*, [arxiv.org/abs/2504.13359](https://arxiv.org/abs/2504.13359)
