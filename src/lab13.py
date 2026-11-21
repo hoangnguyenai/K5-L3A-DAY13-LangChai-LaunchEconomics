@@ -4,6 +4,7 @@ Không cần khoá API. Điền các chỗ ghi VIẾT Ở ĐÂY (đánh dấu TO
 Bản gốc chưa sửa nằm ở lab13_starter.py.
 """
 import math
+from statistics import NormalDist
 import pandas as pd
 
 # Bảng giá GIẢ ĐỊNH của lab (không phải giá thật của nhà cung cấp nào)
@@ -173,5 +174,80 @@ if __name__ == '__main__':
         cps = tong / pilot["thanh_cong"]
         print(f"{phut_lam_lai:.2f} phút làm lại/ca | CPS {cps:,.2f} đ | {cps / BASELINE:.3f}×")
     # TODO CP4 · Nhiệm vụ D: cỡ mẫu.
-    #   from statsmodels.stats.proportion import proportion_effectsize
-    #   from statsmodels.stats.power import NormalIndPower
+    from statsmodels.stats.power import NormalIndPower
+    from statsmodels.stats.proportion import proportion_effectsize
+
+    def co_mau(p1, p2, alpha=0.05, power=0.80):
+        z_a = NormalDist().inv_cdf(1 - alpha / 2)
+        z_b = NormalDist().inv_cdf(power)
+        p_bar = (p1 + p2) / 2
+        tu = z_a * math.sqrt(2 * p_bar * (1 - p_bar)) + z_b * math.sqrt(
+            p1 * (1 - p1) + p2 * (1 - p2)
+        )
+        return math.ceil((tu / (p2 - p1)) ** 2)
+
+    def he_so_thiet_ke(m, icc):
+        return 1 + (m - 1) * icc
+
+    print("\nD1 - Cỡ mẫu (baseline 0,70; alpha 0,05; power 0,80; ICC 0,02)")
+    p1, p2_5, p2_6 = 0.70, 0.75, 0.76
+    alpha, power, icc = 0.05, 0.80, 0.02
+
+    # a) Chia theo yêu cầu
+    n_yc_5 = co_mau(p1, p2_5, alpha, power)
+    print(f"a) Chia theo yêu cầu (+5 điểm): {n_yc_5:,} yêu cầu/nhóm")
+
+    # b) Theo nhân viên, m = 75
+    m_b = 75
+    de_b = he_so_thiet_ke(m_b, icc)
+    n_nv_b = math.ceil(n_yc_5 * de_b)
+    so_nv_moi_nhom_b = math.ceil(n_nv_b / m_b)
+    print(
+        f"b) Theo nhân viên (m={m_b}): DE = {de_b:.2f} | "
+        f"{n_nv_b:,} yêu cầu/nhóm → {so_nv_moi_nhom_b} NV/nhóm "
+        f"(tổng {so_nv_moi_nhom_b * 2} > 40 NV: không đủ người)"
+    )
+
+    # c) 20 nhân viên mỗi nhóm
+    c_nv = 20
+    tran_nv = c_nv / icc
+    print(
+        f"c) {c_nv} nhân viên/nhóm: n_hiệu_dụng < c/ICC = {tran_nv:,.0f} "
+        f"< {n_yc_5:,} (không đạt cho +5 điểm)"
+    )
+
+    # d) 6 depot mỗi nhóm
+    c_depot = 6
+    tran_depot = c_depot / icc
+    print(
+        f"d) {c_depot} depot/nhóm: n_hiệu_dụng < c/ICC = {tran_depot:,.0f} "
+        f"< {n_yc_5:,} (không đạt)"
+    )
+
+    # e) Mức chênh 6 điểm, 20 nhân viên mỗi nhóm
+    n_yc_6 = co_mau(p1, p2_6, alpha, power)
+    # Giải c_nv * m / (1 + (m - 1) * icc) >= n_yc_6
+    m_min_6 = math.ceil((n_yc_6 * (1 - icc)) / (c_nv - n_yc_6 * icc))
+    de_6 = he_so_thiet_ke(m_min_6, icc)
+    n_hieu_dung_6 = (c_nv * m_min_6) / de_6
+    es_5 = proportion_effectsize(p2_5, p1)
+    power_5_tai_n6 = NormalIndPower().power(
+        effect_size=es_5, nobs1=n_yc_6, alpha=alpha, ratio=1.0
+    )
+    print(
+        f"e) Mức chênh +6 điểm ({n_yc_6:,}/nhóm), {c_nv} NV/nhóm: "
+        f"m >= {m_min_6} yêu cầu/NV | DE = {de_6:.2f} | "
+        f"n_hiệu_dụng = {n_hieu_dung_6:,.1f} | "
+        f"power nếu tác động thật +5 điểm ≈ {power_5_tai_n6:.2f}"
+    )
+
+    # Tỉ lệ mở lại 7 ngày hiện tại (đầu vào cho luật dừng an toàn ở D3)
+    ti_le_mo_lai_all = reqs["mo_lai_trong_7_ngay"].mean()
+    so_mo_lai_all = int(reqs["mo_lai_trong_7_ngay"].sum())
+    ti_le_mo_lai_pilot = reqs_pilot["mo_lai_trong_7_ngay"].mean()
+    so_mo_lai_pilot = int(reqs_pilot["mo_lai_trong_7_ngay"].sum())
+    print(
+        f"\nD3 - Tỉ lệ mở lại 7 ngày hiện tại: "
+        f"toàn mẫu {so_mo_lai_all}/{len(reqs)} ({ti_le_mo_lai_all:.2%}) | "
+        f"phạm vi pilot (noi_dia + hang_nang) {so_mo_lai_pilot}/{len(reqs_pilot)} ({ti_le_mo_lai_pilot:.2%})"
+    )
