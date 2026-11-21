@@ -8,7 +8,7 @@
 | --- | --- | --- | --- |
 | **TV1 · Đặng Long Nhật** | Viết code trước giờ giải lao | A–B, rủi ro kinh tế E2, tích hợp và push | Tính lại một kết quả cỡ mẫu D1, đối chiếu phạm vi và ngưỡng chi phí |
 | **TV2 · Điền họ tên trong TEAM.md** | Kiểm số, gắn nhãn 1, viết code sau giờ giải lao | D1–D3, kế hoạch pilot và phần trình bày thiết kế pilot | Tính tay một kết quả A2, kiểm khả năng đo của các chỉ số |
-| **TV3 · Điền họ tên trong TEAM.md** | Gắn nhãn 2 kiêm giữ hồ sơ | Tổng hợp C, chỉ số và event E1, hồ sơ E3, báo cáo nhóm | Kiểm nhãn giả lập, chạy lại code và kiểm file YAML trên máy thứ hai |
+| **TV3 · Nguyễn Lâm Hoàng** | Gắn nhãn 2 kiêm giữ hồ sơ | Tổng hợp C, chỉ số và event E1, hồ sơ E3, báo cáo nhóm | Kiểm nhãn giả lập, chạy lại code và kiểm file YAML trên máy thứ hai |
 
 ## Tiến độ và bàn giao
 

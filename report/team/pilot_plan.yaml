@@ -1,7 +1,3 @@
-# Lab 13 · Nhiệm vụ D · Kế hoạch pilot trợ lý hoàn phí LogiX-VN (Gate 2a)
-# Điền mọi chỗ có dấu hỏi. Khi nộp, ngoài các dòng chú thích không còn dấu hỏi nào.
-# Kiểm tra đọc được: python -c "import yaml; yaml.safe_load(open('../report/team/pilot_plan.yaml'))"
-#
 # D1 · Cỡ mẫu (baseline 0,70; mục tiêu +5 điểm; alpha 0,05; power 0,80; ICC 0,02)
 #   a) Chia theo yêu cầu: 1.251 yêu cầu mỗi nhóm
 #   b) Theo nhân viên, m = 75: DE = 2,48; cần 3.103 yêu cầu/nhóm -> 42 NV/nhóm (tổng 84 > 40 NV hiện có: không đủ người)
@@ -22,38 +18,64 @@
 #
 # Tỉ lệ mo_lai_trong_7_ngay hiện tại và ngưỡng an toàn đã chọn:
 #   Toàn mẫu: 51/1.200 = 4,25%; trong phạm vi pilot (noi_dia + hang_nang): 39/982 = 3,97%.
-#   Không đặt ngưỡng tuyệt đối 3% vì sẽ dừng ngay tuần đầu; chọn ngưỡng tương đối >= +2 điểm so với đối chứng kèm trần tuyệt đối 6%.
+#   Ngưỡng an toàn gồm chênh từ 2 điểm phần trăm so với đối chứng và trần tuyệt đối 6%.
 
 pilot:
-  owner: "Giám đốc vận hành LogiX-VN"
-  scope: "Chỉ noi_dia (2.695,64 đ; 0,225x) và hang_nang (8.220,73 đ; 0,685x so với 12.000 đ) trên 12 depot; loại quoc_te (22.515,17 đ; 1,876x) và doi_tac (10.214,87 đ; 0,851x) [simulated]"
+  owner: Giám đốc vận hành LogiX-VN
+  scope: Chỉ noi_dia (2.695,64 đ; 0,225x) và hang_nang (8.220,73 đ; 0,685x so với 12.000 đ) tại các depot bố trí được cả hai nhóm; loại quoc_te (22.515,17 đ; 1,876x) và doi_tac (10.214,87
+    đ; 0,851x) [simulated]
   assignment:
-    unit: "staff"
+    unit: staff
     control_share: 0.5
     randomized: true
-  rollout: [0.10, 0.25, 0.50]     # 4 -> 10 -> 20 nhân viên, mỗi bước một tuần; chỉ đo chỉ số chính từ bước 0.50
+    stratification: depot
+    seed: 1303448
+  rollout:
+  - 0.1
+  - 0.25
+  - 0.5
+  schedule:
+    preflight: '2026-11-27'
+    four_staff_start: '2026-11-30'
+    ten_staff_start: '2026-12-14'
+    primary_cohort_start: '2026-12-28'
+    primary_cohort_end: '2027-01-10'
+    timezone: GMT+7
+    note: Ngày dự kiến, chỉ chuyển bước sau khi đủ điều kiện an toàn. Đo chỉ số chính từ bước 20 nhân viên can thiệp; giữ theo dõi thêm ít nhất 8 ngày cho cửa sổ 24 giờ và 7 ngày.
   primary_metric:
     name: dong_trong_24h_khong_mo_lai_7_ngay
-    baseline: 0.70
+    baseline: 0.7
     mde: 0.06
     alpha: 0.05
-    power: 0.80
+    power: 0.8
     n_per_arm: 859
+    raw_requests_per_arm_min: 5980
+    requests_per_cluster_target: 299
     design_effect: 6.96
     clusters_per_arm: 20
+    analysis: So sánh theo nhóm được phân ban đầu, kể cả khi nhân viên không mở trợ lý. Ước lượng chênh lệch và khoảng tin cậy 95% có hiệu chỉnh cụm theo nhân viên. Nếu số yêu cầu từng
+      cụm mất cân bằng, kiểm tra lại cỡ mẫu hiệu dụng trước khi kết luận.
   identifiability:
-    concurrent_control: "Có: 20 nhân viên đối chứng xử lý song song trong cùng tuần và cùng depot với 20 nhân viên dùng trợ lý"
-    spillover_risk: "Trung bình do nhân viên cùng depot có thể trao đổi; giảm bằng phân quyền truy cập theo staff_id, phân tầng ngẫu nhiên theo depot và theo dõi log sử dụng theo tài khoản"
-    predeclared: "Có: chỉ số chính, MDE +6 điểm, luật dừng, seed phân ngẫu nhiên và ngày quyết định đều chốt trước ngày chạy pilot"
+    concurrent_control: Đối chứng tự xử lý trong cùng thời gian, với cùng tiêu chí nhận yêu cầu và cùng định nghĩa kết quả.
+    spillover_risk: Nhân viên có thể chia sẻ gợi ý trong cùng depot. Giới hạn quyền theo tài khoản, ghi staff_id khi mở trợ lý, và ghi nhận chuyển yêu cầu giữa các nhóm.
+    predeclared: Chốt trước ngày bắt đầu cách chia, chỉ số, ngưỡng, mốc thời gian và phương pháp phân tích.
+    cluster_count: 20 nhân viên mỗi nhóm; giám sát số yêu cầu theo từng nhân viên.
   stop_rules:
-    - "NẾU tỉ lệ mở lại 7 ngày của nhóm trợ lý cao hơn đối chứng >= 2 điểm phần trăm hoặc vượt 6%, hoặc có >= 1 ca hoàn trùng hay báo đã hoàn nhưng sổ cái chưa ghi nhận TRONG 3 ngày liên tiếp THÌ Giám đốc vận hành LogiX-VN tắt trợ lý trong 30 phút KHÔNG THÌ không được chuyển sang bước rollout tiếp theo"
-    - "NẾU chi phí mỗi việc thành công (gồm xem lại và làm lại) > 8.000 đ TRONG 2 tuần liên tiếp THÌ PM trợ lý hoàn phí thu hẹp phạm vi về chỉ noi_dia và giới hạn tối đa 2 lần chạy KHÔNG THÌ không được mở rộng nhóm hang_nang"
-    - "NẾU tỉ lệ bỏ qua gợi ý (quyet_dinh_xem_lai là sua hoặc bo) > 40% TRONG 1 tuần liên tiếp THÌ Trưởng nhóm CSKH phỏng vấn ít nhất 5 nhân viên trong 3 ngày để xử lý nguyên nhân KHÔNG THÌ không được tăng tỉ lệ rollout"
-  interim_looks: "chỉ kiểm tra chỉ số an toàn"
-  rollback: "Giám đốc vận hành LogiX-VN bấm cờ tắt trợ lý trên cổng CSKH, hiệu lực trong 30 phút; khách được phục vụ ngay bằng luồng nhân viên tự làm (6 phút/yêu cầu)"
-  decision_date: "2027-01-05"
+  - NẾU tỷ lệ mở lại 7 ngày của đoàn hệ đủ theo dõi vượt 6% hoặc cao hơn đối chứng ít nhất 2 điểm phần trăm TRONG 3 kỳ theo dõi ngày liên tiếp THÌ Giám đốc vận hành tắt trợ lý trong
+    30 phút và chuyển sang nhân viên tự làm KHÔNG THÌ chỉ chuyển bước khi đủ dữ liệu an toàn.
+  - NẾU phát hiện ít nhất 1 ca hoàn tiền trùng hoặc thông báo “đã hoàn” thiếu bản ghi sổ cái thành công TRONG bất kỳ thời điểm nào THÌ Giám đốc vận hành tắt trợ lý trong 30 phút và yêu
+    cầu kế toán đối soát KHÔNG THÌ tiếp tục đối soát mỗi ngày.
+  - NẾU chi phí biến đổi mỗi việc thành công vượt 8.000 đ TRONG 2 tuần liên tiếp THÌ PM thu hẹp về noi_dia, giới hạn 2 lần chạy và báo Giám đốc vận hành KHÔNG THÌ giữ phạm vi đã duyệt.
+  - NẾU tỷ lệ sửa hoặc bỏ gợi ý vượt 40% TRONG 1 tuần có ít nhất 30 quyết định xem lại THÌ Trưởng nhóm CSKH giữ nguyên mức rollout và phỏng vấn 5 nhân viên trong 3 ngày KHÔNG THÌ tiếp
+    tục theo dõi và chỉ chuyển bước nếu đủ điều kiện an toàn.
+  interim_looks: Dùng dữ liệu giữa kỳ để giám sát an toàn, chi phí và mức sử dụng. Chốt chỉ số chính sau khi đủ mẫu và đủ thời gian theo dõi.
+  rollback: Giám đốc vận hành tắt cờ tính năng trong 30 phút. CSKH tiếp quản hàng đợi và kế toán đối soát các giao dịch đang xử lý.
+  decision_date: '2027-01-19'
+  decision_rule: Giám đốc vận hành chỉ kết luận hiệu quả khi đủ mẫu, đủ theo dõi, khoảng tin cậy 95% của mức tăng nằm trên 0 và các điều kiện an toàn, chi phí đều đạt. Nếu thiếu mẫu
+    hoặc chưa đủ theo dõi, kéo dài theo kế hoạch cập nhật đã duyệt.
   simulated_inputs:
-    - "Chi phí mỗi việc thành công noi_dia = 2.695,64 đ (0,225x) và hang_nang = 8.220,73 đ (0,685x) [simulated]"
-    - "Chi phí mỗi việc thành công quoc_te = 22.515,17 đ (1,876x) và doi_tac = 10.214,87 đ (0,851x) [simulated]"
-    - "Chi phí biến đổi phạm vi pilot = 3.413,90 đ; cộng cố định 40 triệu/tháng ở 22.500 yêu cầu/tháng = 5.784,27 đ [simulated]"
-    - "Chi phí xem lại 100% phạm vi pilot = 11.742,79 đ (9 phút làm lại) đến 12.414,50 đ (15,30 phút làm lại) [simulated]"
+  - Chi phí mỗi việc thành công noi_dia = 2.695,64 đ (0,225x) và hang_nang = 8.220,73 đ (0,685x) [simulated]
+  - Chi phí mỗi việc thành công quoc_te = 22.515,17 đ (1,876x) và doi_tac = 10.214,87 đ (0,851x) [simulated]
+  - Chi phí biến đổi phạm vi pilot = 3.413,90 đ; cộng cố định 40 triệu/tháng ở 22.500 yêu cầu/tháng = 5.784,27 đ [simulated]
+  - Chi phí xem lại 100% phạm vi pilot = 11.742,79 đ (9 phút làm lại) đến 12.414,50 đ (15,30 phút làm lại) [simulated]
+  - Tỷ lệ mở lại 4,25% toàn mẫu và 3,97% trong phạm vi là quan sát từ dữ liệu giả lập.

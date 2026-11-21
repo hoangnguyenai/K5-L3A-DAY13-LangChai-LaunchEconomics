@@ -1,11 +1,15 @@
 """Lab 13 · Định giá agent và lập kế hoạch pilot (Gate 2a) — bài làm của nhóm (file nộp).
-Chạy trong thư mục src/: python3 lab13.py   (cần pandas; Nhiệm vụ D cần thêm statsmodels)
-Không cần khoá API. Điền các chỗ ghi VIẾT Ở ĐÂY (đánh dấu TODO CP1…CP4). Dữ liệu trong hai file CSV là giả lập.
+Chạy trong thư mục src/: python lab13.py (cần pandas và statsmodels). Dữ liệu trong hai file CSV là giả lập.
 Bản gốc chưa sửa nằm ở lab13_starter.py.
 """
-import math
+import sys
+from math import ceil, sqrt
+from pathlib import Path
 from statistics import NormalDist
+
 import pandas as pd
+from statsmodels.stats.power import NormalIndPower
+from statsmodels.stats.proportion import proportion_effectsize
 
 # Bảng giá GIẢ ĐỊNH của lab (không phải giá thật của nhà cung cấp nào)
 GIA_VAO = 26        # đồng cho 1.000 token đầu vào
@@ -16,7 +20,6 @@ BASELINE = 12000    # đồng cho 1 yêu cầu khi nhân viên tự làm (6 phú
 
 
 # ---------- Nhiệm vụ A1 · Kinh tế của việc chạy lại ----------
-# TODO CP1: viết ba hàm dưới đây cho tới khi kiem_tra_dap_an_biet_truoc() in ĐẠT.
 def so_lan_chay_ky_vong(p, k=None):
     if k is None:
         return 1 / p
@@ -38,11 +41,10 @@ def kiem_tra_dap_an_biet_truoc():
     assert abs(so_lan_chay_ky_vong(0.8, 2) - 1.20) < 1e-9, 'p=0,8, tối đa 2 lần → 1,20 lần chạy'
     assert abs(so_lan_chay_ky_vong(0.8) - 1.25) < 1e-9, 'p=0,8, chạy đến khi đúng → 1,25 lần chạy'
     assert abs(he_so_chi_phi_moi_viec_thanh_cong(0.8, 3) - 1.25) < 1e-9, 'p=0,8, tối đa 3 lần → 1,25 lần giá một lần chạy'
-    print('Ba phép thử đáp án biết trước: ĐẠT')
+    print('Ba phép thử đáp án biết trước: ĐẠT (1,20 · 1,25 · 1,25)')
 
 
 # ---------- Nhiệm vụ A2 · Mô hình chi phí từ trace ----------
-# TODO CP1: viết mo_hinh; CP2 gọi lại hàm này với tham số giá và hệ số đã đổi.
 def mo_hinh(
     runs, reqs, gia_vao=26, gia_ra=130, gia_tool=15, luong_phut=2000,
     he_so_xem_lai=1.0, he_so_lam_lai=1.0, max_lan_chay=None,
@@ -84,14 +86,99 @@ def mo_hinh(
     }
 
 
-if __name__ == '__main__':
-    runs = pd.read_csv('logix_runs.csv')
-    reqs = pd.read_csv('logix_requests.csv', keep_default_na=False)
+def co_mau(p1, p2, alpha=0.05, power=0.8):
+    normal = NormalDist()
+    za = normal.inv_cdf(1 - alpha / 2)
+    zb = normal.inv_cdf(power)
+    p_gop = (p1 + p2) / 2
+    sai_so_gop = sqrt(2 * p_gop * (1 - p_gop))
+    sai_so_rieng = sqrt(p1 * (1 - p1) + p2 * (1 - p2))
+    return ceil(((za * sai_so_gop + zb * sai_so_rieng) / (p2 - p1)) ** 2)
+
+
+def he_so_thiet_ke(m, icc):
+    return 1 + (m - 1) * icc
+
+
+def in_co_mau():
+    print("\nD1 - Cỡ mẫu (baseline 0,70; alpha 0,05; power 0,80; ICC 0,02)")
+    p1, p2_5, p2_6 = 0.70, 0.75, 0.76
+    alpha, power, icc = 0.05, 0.80, 0.02
+
+    # a) Chia theo yêu cầu
+    n_yc_5 = co_mau(p1, p2_5, alpha, power)
+    print(f"a) Chia theo yêu cầu (+5 điểm): {n_yc_5:,} yêu cầu/nhóm")
+
+    # b) Theo nhân viên, m = 75
+    m_b = 75
+    de_b = he_so_thiet_ke(m_b, icc)
+    n_nv_b = ceil(n_yc_5 * de_b)
+    so_nv_moi_nhom_b = ceil(n_nv_b / m_b)
+    print(
+        f"b) Theo nhân viên (m={m_b}): DE = {de_b:.2f} | "
+        f"{n_nv_b:,} yêu cầu/nhóm → {so_nv_moi_nhom_b} NV/nhóm "
+        f"(tổng {so_nv_moi_nhom_b * 2} > 40 NV: không đủ người)"
+    )
+
+    # c) 20 nhân viên mỗi nhóm
+    c_nv = 20
+    tran_nv = c_nv / icc
+    print(
+        f"c) {c_nv} nhân viên/nhóm: n_hiệu_dụng < c/ICC = {tran_nv:,.0f} "
+        f"< {n_yc_5:,} (không đạt cho +5 điểm)"
+    )
+
+    # d) 6 depot mỗi nhóm
+    c_depot = 6
+    tran_depot = c_depot / icc
+    print(
+        f"d) {c_depot} depot/nhóm: n_hiệu_dụng < c/ICC = {tran_depot:,.0f} "
+        f"< {n_yc_5:,} (không đạt)"
+    )
+
+    # e) Mức chênh 6 điểm, 20 nhân viên mỗi nhóm
+    n_yc_6 = co_mau(p1, p2_6, alpha, power)
+    # Giải c_nv * m / (1 + (m - 1) * icc) >= n_yc_6
+    m_min_6 = ceil((n_yc_6 * (1 - icc)) / (c_nv - n_yc_6 * icc))
+    de_6 = he_so_thiet_ke(m_min_6, icc)
+    n_hieu_dung_6 = (c_nv * m_min_6) / de_6
+    es_5 = proportion_effectsize(p2_5, p1)
+    power_5_tai_n6 = NormalIndPower().power(
+        effect_size=es_5, nobs1=n_yc_6, alpha=alpha, ratio=1.0
+    )
+    print(
+        f"e) Mức chênh +6 điểm ({n_yc_6:,}/nhóm), {c_nv} NV/nhóm: "
+        f"m >= {m_min_6} yêu cầu/NV | DE = {de_6:.2f} | "
+        f"n_hiệu_dụng = {n_hieu_dung_6:,.1f} | "
+        f"power nếu tác động thật +5 điểm ≈ {power_5_tai_n6:.2f}"
+    )
+
+
+def in_mo_lai(reqs, reqs_pilot):
+    # Tỉ lệ mở lại 7 ngày hiện tại (đầu vào cho luật dừng an toàn ở D3)
+    ti_le_mo_lai_all = reqs["mo_lai_trong_7_ngay"].mean()
+    so_mo_lai_all = int(reqs["mo_lai_trong_7_ngay"].sum())
+    ti_le_mo_lai_pilot = reqs_pilot["mo_lai_trong_7_ngay"].mean()
+    so_mo_lai_pilot = int(reqs_pilot["mo_lai_trong_7_ngay"].sum())
+    print(
+        f"\nD3 - Tỉ lệ mở lại 7 ngày hiện tại: "
+        f"toàn mẫu {so_mo_lai_all}/{len(reqs)} ({ti_le_mo_lai_all:.2%}) | "
+        f"phạm vi pilot (noi_dia + hang_nang) {so_mo_lai_pilot}/{len(reqs_pilot)} ({ti_le_mo_lai_pilot:.2%})"
+    )
+
+
+def main():
+    src = Path(__file__).parent
+    runs = pd.read_csv(src / 'logix_runs.csv')
+    reqs = pd.read_csv(src / 'logix_requests.csv', keep_default_na=False)
     kiem_tra_dap_an_biet_truoc()
     ket_qua = mo_hinh(runs, reqs)
+    print('A2 - Chi phí có phút nhân viên mang nhãn simulated')
     for ten, gia_tri in ket_qua.items():
-        print(f'{ten:12s} {gia_tri:>14,.0f}')
-    # TODO CP1 · Nhiệm vụ A3: tính lại theo từng giá trị của cột loai.
+        if ten == 'thanh_cong':
+            print(f'{ten:16s} {gia_tri:>14,d}')
+        else:
+            print(f'{ten:16s} {gia_tri:>14,.2f}')
     print("\nA3 - Theo loại yêu cầu")
     for loai, reqs_loai in reqs.groupby("loai", sort=False):
         kq = mo_hinh(runs, reqs_loai)
@@ -125,7 +212,6 @@ if __name__ == '__main__':
             f"cố định {co_dinh_moi_viec:,.2f} đ/việc | "
             f"CPS {cps_ca_co_dinh:,.2f} đ | {cps_ca_co_dinh / BASELINE:.3f}×"
         )
-    # TODO CP2 · Nhiệm vụ B: đổi từng yếu tố, ghi vào bảng độ nhạy.
     print("\nB1 - Đổi từng yếu tố")
     cps_goc = ket_qua["cps"]
     kich_ban = [
@@ -155,7 +241,8 @@ if __name__ == '__main__':
         print(
             f"{gioi_han} lượt | trợ lý {kq['tong']:,.2f} đ | "
             f"{khong_thanh_cong} yêu cầu không thành công | "
-            f"hệ thống {tong_he_thong:,.2f} đ | CPS {kq['cps']:,.2f} đ"
+            f"hệ thống {tong_he_thong:,.2f} đ | CPS {kq['cps']:,.2f} đ | "
+            f"{tong_he_thong / len(reqs):,.2f} đ/yêu cầu"
         )
 
     print("\nB4 - Xem lại 100% trong phạm vi pilot")
@@ -172,82 +259,23 @@ if __name__ == '__main__':
         tien_lam_lai = so_ca_lam_lai * phut_lam_lai * LUONG_PHUT
         tong = pilot["token"] + pilot["tool"] + tien_xem_lai + tien_lam_lai
         cps = tong / pilot["thanh_cong"]
-        print(f"{phut_lam_lai:.2f} phút làm lại/ca | CPS {cps:,.2f} đ | {cps / BASELINE:.3f}×")
-    # TODO CP4 · Nhiệm vụ D: cỡ mẫu.
-    from statsmodels.stats.power import NormalIndPower
-    from statsmodels.stats.proportion import proportion_effectsize
+        tien_khac = pilot["token"] + pilot["tool"] + tien_lam_lai
+        hoa_von = (BASELINE * pilot["thanh_cong"] - tien_khac) / (so_ca_xem_lai * LUONG_PHUT)
+        print(f"{phut_lam_lai:.2f} phút làm lại/ca | CPS {cps:,.2f} đ | {cps / BASELINE:.3f}× | "
+              f"hòa vốn {hoa_von:.2f} phút xem lại")
 
-    def co_mau(p1, p2, alpha=0.05, power=0.80):
-        z_a = NormalDist().inv_cdf(1 - alpha / 2)
-        z_b = NormalDist().inv_cdf(power)
-        p_bar = (p1 + p2) / 2
-        tu = z_a * math.sqrt(2 * p_bar * (1 - p_bar)) + z_b * math.sqrt(
-            p1 * (1 - p1) + p2 * (1 - p2)
-        )
-        return math.ceil((tu / (p2 - p1)) ** 2)
+    in_co_mau()
+    in_mo_lai(reqs, reqs_pilot)
 
-    def he_so_thiet_ke(m, icc):
-        return 1 + (m - 1) * icc
+    xem_lai = reqs.loc[reqs["duoc_xem_lai"].eq(1)]
+    chinh = (reqs["dong_trong_24h"].eq(1) & reqs["mo_lai_trong_7_ngay"].eq(0)).sum()
+    bo_qua = xem_lai["quyet_dinh_xem_lai"].isin(["sua", "bo"]).sum()
+    print(f"E1 chinh={chinh}/{len(reqs)}, bo_qua={bo_qua}/{len(xem_lai)}, "
+          f"mo_lai={reqs['mo_lai_trong_7_ngay'].sum()}/{len(reqs)}, "
+          f"mo_lai_pilot={reqs_pilot['mo_lai_trong_7_ngay'].sum()}/{len(reqs_pilot)}")
 
-    print("\nD1 - Cỡ mẫu (baseline 0,70; alpha 0,05; power 0,80; ICC 0,02)")
-    p1, p2_5, p2_6 = 0.70, 0.75, 0.76
-    alpha, power, icc = 0.05, 0.80, 0.02
 
-    # a) Chia theo yêu cầu
-    n_yc_5 = co_mau(p1, p2_5, alpha, power)
-    print(f"a) Chia theo yêu cầu (+5 điểm): {n_yc_5:,} yêu cầu/nhóm")
-
-    # b) Theo nhân viên, m = 75
-    m_b = 75
-    de_b = he_so_thiet_ke(m_b, icc)
-    n_nv_b = math.ceil(n_yc_5 * de_b)
-    so_nv_moi_nhom_b = math.ceil(n_nv_b / m_b)
-    print(
-        f"b) Theo nhân viên (m={m_b}): DE = {de_b:.2f} | "
-        f"{n_nv_b:,} yêu cầu/nhóm → {so_nv_moi_nhom_b} NV/nhóm "
-        f"(tổng {so_nv_moi_nhom_b * 2} > 40 NV: không đủ người)"
-    )
-
-    # c) 20 nhân viên mỗi nhóm
-    c_nv = 20
-    tran_nv = c_nv / icc
-    print(
-        f"c) {c_nv} nhân viên/nhóm: n_hiệu_dụng < c/ICC = {tran_nv:,.0f} "
-        f"< {n_yc_5:,} (không đạt cho +5 điểm)"
-    )
-
-    # d) 6 depot mỗi nhóm
-    c_depot = 6
-    tran_depot = c_depot / icc
-    print(
-        f"d) {c_depot} depot/nhóm: n_hiệu_dụng < c/ICC = {tran_depot:,.0f} "
-        f"< {n_yc_5:,} (không đạt)"
-    )
-
-    # e) Mức chênh 6 điểm, 20 nhân viên mỗi nhóm
-    n_yc_6 = co_mau(p1, p2_6, alpha, power)
-    # Giải c_nv * m / (1 + (m - 1) * icc) >= n_yc_6
-    m_min_6 = math.ceil((n_yc_6 * (1 - icc)) / (c_nv - n_yc_6 * icc))
-    de_6 = he_so_thiet_ke(m_min_6, icc)
-    n_hieu_dung_6 = (c_nv * m_min_6) / de_6
-    es_5 = proportion_effectsize(p2_5, p1)
-    power_5_tai_n6 = NormalIndPower().power(
-        effect_size=es_5, nobs1=n_yc_6, alpha=alpha, ratio=1.0
-    )
-    print(
-        f"e) Mức chênh +6 điểm ({n_yc_6:,}/nhóm), {c_nv} NV/nhóm: "
-        f"m >= {m_min_6} yêu cầu/NV | DE = {de_6:.2f} | "
-        f"n_hiệu_dụng = {n_hieu_dung_6:,.1f} | "
-        f"power nếu tác động thật +5 điểm ≈ {power_5_tai_n6:.2f}"
-    )
-
-    # Tỉ lệ mở lại 7 ngày hiện tại (đầu vào cho luật dừng an toàn ở D3)
-    ti_le_mo_lai_all = reqs["mo_lai_trong_7_ngay"].mean()
-    so_mo_lai_all = int(reqs["mo_lai_trong_7_ngay"].sum())
-    ti_le_mo_lai_pilot = reqs_pilot["mo_lai_trong_7_ngay"].mean()
-    so_mo_lai_pilot = int(reqs_pilot["mo_lai_trong_7_ngay"].sum())
-    print(
-        f"\nD3 - Tỉ lệ mở lại 7 ngày hiện tại: "
-        f"toàn mẫu {so_mo_lai_all}/{len(reqs)} ({ti_le_mo_lai_all:.2%}) | "
-        f"phạm vi pilot (noi_dia + hang_nang) {so_mo_lai_pilot}/{len(reqs_pilot)} ({ti_le_mo_lai_pilot:.2%})"
-    )
+if __name__ == "__main__":
+    if not sys.stdout.isatty():
+        sys.stdout.reconfigure(encoding="utf-8")
+    main()

@@ -40,11 +40,7 @@ Giải lao 15:20–15:35. Chi tiết từng checkpoint: [CHECKPOINTS.md](CHECKPO
 
 ```bash
 cd src
-python3 -m venv .venv
-source .venv/bin/activate            # Windows PowerShell: .\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-python -c "import pandas, numpy, scipy, statsmodels; print('san sang')"
-python lab13.py                      # báo NotImplementedError cho tới khi viết xong các hàm
+python lab13.py
 ```
 
 Cài đặt theo từng hệ điều hành và cách đọc dữ liệu đúng: [src/README.md](src/README.md).

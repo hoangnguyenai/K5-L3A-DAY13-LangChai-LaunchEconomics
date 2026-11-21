@@ -2,10 +2,10 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
-- Lớp: L3A hoặc L3B
-- Repo nhóm: `K5-L3A-DAY13-TenNhom-LaunchEconomics` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Tên nhóm: LangChai
+- Lớp: L3A
+- Repo nhóm: `K5-L3A-DAY13-LangChai-LaunchEconomics` (xem [SUBMISSION.md](SUBMISSION.md))
+- Repo: [LangChai trên GitHub](https://github.com/hoangnguyenai/K5-L3A-DAY13-LangChai-LaunchEconomics) · Nhánh nộp: main
 
 ## Thành viên
 
@@ -13,7 +13,7 @@
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 |Đặng Long Nhật|2A202603483|nhatlong12cc@gmail.com|        |         |
 |   2 |        |      |       |        |         |
-|   3 |        |      |       |        |         |
+|   3 | Nguyễn Lâm Hoàng | 2A202603448 | 26ai.hoangnl@vinuni.edu.vn |        | Người gắn nhãn 2 kiêm giữ hồ sơ |
 
 Bốn vai của lab:
 
@@ -67,3 +67,19 @@ Sao chép mục dưới đây cho từng thành viên.
 
 - [`ae73c6e`](https://github.com/hoangnguyenai/K5-L3A-DAY13-LangChai-LaunchEconomics/commit/ae73c6edfdfd83b9cca6db32a2ea4b82d45dd830) · [Code A/B](src/lab13.py) và [báo cáo cá nhân](report/team/2A202603483_DangLongNhat.md).
 - [`3d273f0`](https://github.com/hoangnguyenai/K5-L3A-DAY13-LangChai-LaunchEconomics/commit/3d273f0eb1b653c8cde88ae84c3cf954d9c3d152) và [`bcf31f0`](https://github.com/hoangnguyenai/K5-L3A-DAY13-LangChai-LaunchEconomics/commit/bcf31f099dce9b2aa44cb5effe273ff94eb605ec) · Kết quả A/B và nhãn `simulated` trong [bảng chi phí](report/team/bang_chi_phi.md).
+
+## Nguyễn Lâm Hoàng-2A202603448
+
+### Phần việc phụ trách
+
+- Tổng hợp nhiệm vụ C, phụ trách E1 và E3, giữ hồ sơ launch và tổng hợp báo cáo nhóm.
+- Tích hợp E2 từ TV1 và kết quả pilot từ TV2. Phụ trách C7 khi duyệt chéo và kiểm tra hồ sơ trước khi nộp.
+
+### Đóng góp cụ thể
+
+- Chuẩn bị bảng tính thử E1, đặc tả event và cách đối chiếu từng chỉ số. Chuẩn bị bản hồ sơ launch và báo cáo nhóm theo các bằng chứng hiện có.
+- Đặc tả 12 event có trace_id, đối chiếu 20 nhãn với TV2, lập bảng 5 phương án khắc phục và tổng hợp hồ sơ một trang.
+
+### Bằng chứng
+
+- [Đặc tả chỉ số](report/team/chi_so.md), [hồ sơ launch](report/team/ho_so_launch_v0.md), [báo cáo nhóm](report/team/group_report.md) và [báo cáo cá nhân](report/team/2A202603448_NguyenLamHoang.md).

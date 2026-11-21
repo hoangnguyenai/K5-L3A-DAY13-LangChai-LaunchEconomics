@@ -74,12 +74,12 @@ Ngoại suy từ **900 việc thành công trong phạm vi pilot trên 1.200 yê
 | 2 lần | 4.093.220,23 đ | 234 | **6.901.220,23 đ** | 4.237,29 đ |
 | 3 lần | 4.373.585,13 đ | 222 | 7.037.585,13 đ | 4.471,97 đ |
 
-- Giới hạn nào rẻ nhất cho công ty? Có trùng với giới hạn cho chi phí mỗi việc thành công thấp nhất không? Giới hạn **2 lần** cho tổng chi phí hệ thống thấp nhất (**6.901.220,23 đ**, `simulated`). Giới hạn **1 lần** cho CPS thấp nhất (**4.110,99 đ**, `simulated`) và để lại thêm **85 yêu cầu** cần nhân viên xử lý theo mô hình của lab.
+- Giới hạn nào rẻ nhất cho công ty? Có trùng với giới hạn cho chi phí mỗi việc thành công thấp nhất không? Giới hạn **2 lần** cho tổng chi phí hệ thống thấp nhất (**6.901.220,23 đ**, tương đương **5.751,02 đ/yêu cầu**, `simulated`). Giới hạn **1 lần** cho CPS thấp nhất (**4.110,99 đ**, `simulated`) và để lại thêm **85 yêu cầu** cần nhân viên xử lý theo mô hình của lab.
 
 ## B4 · Nếu phải xem lại tất cả
 
 - Chi phí mỗi việc thành công khi xem lại 100% (`noi_dia` + `hang_nang`), so với 12.000 đ: Có **948 yêu cầu xem lại** và **48 ca làm lại**. CPS là **11.742,79 đ** (0,979×, `simulated`) với 9 phút làm lại/ca và **12.414,50 đ** (1,035×, `simulated`) với trung bình dữ liệu khoảng 15,30 phút/ca (`simulated`).
-- Kết quả này nói gì về thứ pilot cần học được? Kịch bản 15,30 phút (`simulated`) vượt mốc **12.000 đ**. Pilot cần đo thời gian và tỉ lệ xem lại, đồng thời theo dõi chất lượng xử lý để biết có thể giảm mức xem lại đến đâu.
+- Kết quả này nói gì về thứ pilot cần học được? Kịch bản 15,30 phút (`simulated`) vượt mốc **12.000 đ**. Mốc hòa vốn là **5,12 phút** xem lại với 9 phút làm lại và **4,80 phút** với trung bình CSV (`simulated`). Pilot cần đo thời gian và tỉ lệ xem lại, đồng thời theo dõi chất lượng xử lý để biết có thể giảm mức xem lại đến đâu.
 
 ## Kiểm tay A2 (TV2 · người kiểm số)
 
