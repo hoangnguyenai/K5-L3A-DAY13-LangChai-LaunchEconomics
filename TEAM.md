@@ -11,9 +11,9 @@
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-| 1 | Đặng Long Nhật | 2A202603483 | nhatlong12cc@gmail.com | | TV1 · Người viết code A–B |
+| 1 | Đặng Long Nhật | 2A202603483 | nhatlong12cc@gmail.com | Nhatlong2 | TV1 · Người viết code A–B |
 | 2 | Nguyễn Trường Thành | 2A202603512 | 26ai.thanhnt6@vinuni.edu.vn | Thanhnt-da | TV2 · Kiểm số, gắn nhãn 1 và viết code CP4 |
-|   3 | Nguyễn Lâm Hoàng | 2A202603448 | 26ai.hoangnl@vinuni.edu.vn |        | Người gắn nhãn 2 kiêm giữ hồ sơ |
+| 3 | Nguyễn Lâm Hoàng | 2A202603448 | 26ai.hoangnl@vinuni.edu.vn | hoangnguyenai | Người gắn nhãn 2 kiêm giữ hồ sơ |
 
 Bốn vai của lab:
 
