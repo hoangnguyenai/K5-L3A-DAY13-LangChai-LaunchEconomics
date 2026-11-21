@@ -1,51 +1,69 @@
-# Lab 13 · Nhiệm vụ D · Kế hoạch pilot trợ lý hoàn phí LogiX-VN (Gate 2a)
-# Điền mọi chỗ có dấu hỏi. Khi nộp, ngoài các dòng chú thích không còn dấu hỏi nào.
-# Kiểm tra đọc được: python -c "import yaml; yaml.safe_load(open('../report/team/pilot_plan.yaml'))"
-#
-# D1 · Cỡ mẫu (baseline 0,70; mục tiêu +5 điểm; alpha 0,05; power 0,8; ICC 0,02)
-#   a) Chia theo yêu cầu:
-#   b) Theo nhân viên, m = 75:
-#   c) 20 nhân viên mỗi nhóm:
-#   d) 6 depot mỗi nhóm:
-#   e) Mức chênh 6 điểm (859 mỗi nhóm), 20 nhân viên mỗi nhóm:
-#
-# D2 · Năm câu kiểm tra "tách được tác động" với cách chia đã chọn (mỗi câu một dòng):
-#   1. Đối chứng chạy cùng thời gian:
-#   2. Chia ngẫu nhiên hay do người chọn:
-#   3. Ảnh hưởng gián tiếp và cách giảm:
-#   4. Chỉ số chính, ngưỡng, ngày quyết định đã viết trước:
-#   5. Ít nhất 20 cụm mỗi nhóm:
-#
-# Đánh đổi đã chấp nhận (nếu cách chia chưa đạt cả hai điều kiện):
-#
-# Tỉ lệ mo_lai_trong_7_ngay hiện tại và ngưỡng an toàn đã chọn:
-
-pilot:
-  owner: "?"                      # một người có tên vai trò, không ghi "cả đội"
-  scope: "?"                      # loại yêu cầu nào, depot nào; dựa vào kết quả A3
-  assignment:
-    unit: "?"                     # request | staff | depot
-    control_share: 0.5
-    randomized: true
-  rollout: [0.10, 0.25, 0.50]     # mỗi bước một tuần
-  primary_metric:
-    name: dong_trong_24h_khong_mo_lai_7_ngay
-    baseline: 0.70
-    mde: 0.05
-    alpha: 0.05
-    power: 0.80
-    n_per_arm: "?"
-    design_effect: "?"            # 1 nếu chia theo yêu cầu
-    clusters_per_arm: "?"         # để trống nếu chia theo yêu cầu
-  identifiability:
-    concurrent_control: "?"
-    spillover_risk: "?"
-    predeclared: "?"
-  stop_rules:
-    - "NẾU ? TRONG ? THÌ ? KHÔNG THÌ ?"
-    - "NẾU ? TRONG ? THÌ ? KHÔNG THÌ ?"
-    - "NẾU ? TRONG ? THÌ ? KHÔNG THÌ ?"
-  interim_looks: "chỉ kiểm tra chỉ số an toàn"
-  rollback: "?"                   # ai bấm, mất bao lâu, khách được phục vụ bằng gì
-  decision_date: "?"
-  simulated_inputs: ["?"]         # liệt kê mọi con số giả lập đã dùng
+# D1a: 1.251 yêu cầu mỗi nhóm cho mức chênh 5 điểm, alpha 0,05 và power 0,80.
+# D1b: 75 yêu cầu/nhân viên, ICC 0,02, DE 2,48. Cần 3.103 yêu cầu và 42 nhân viên mỗi nhóm.
+# D1c: 20 nhân viên mỗi nhóm cho cận trên 20/0,02 = 1.000 yêu cầu hiệu dụng, dưới 1.251.
+# D1d: Cận trên với 6 depot mỗi nhóm là 6/0,02 = 300 yêu cầu hiệu dụng.
+# D1e: Mức chênh 6 điểm cần 859 yêu cầu hiệu dụng mỗi nhóm. Với 20 nhân viên, m = 299, DE = 6,96, n hiệu dụng = 859,20.
+# D2.1: 20 nhân viên đối chứng làm cùng thời gian tại cùng các depot đủ điều kiện.
+# D2.2: Chia ngẫu nhiên theo nhân viên, phân tầng theo depot, dùng seed đã chốt.
+# D2.3: Giảm chia sẻ gợi ý bằng quyền truy cập theo tài khoản và đo lượt mở theo staff_id.
+# D2.4: Chốt trước phạm vi, chỉ số, cỡ mẫu, ngưỡng và ngày quyết định.
+# D2.5: 20 cụm mỗi nhóm ở giai đoạn phân tích chính.
+# Đánh đổi: Power khoảng 64,17% nếu hiệu ứng thực là 5 điểm. Mức chênh thiết kế là 6 điểm.
+# Mở lại 7 ngày: 51/1.200 = 4,25% toàn mẫu, 39/982 = 3,97% trong phạm vi.
+{
+  "pilot": {
+    "owner": "Giám đốc vận hành LogiX-VN",
+    "scope": "Chỉ noi_dia và hang_nang tại các depot có thể bố trí cùng lúc hai nhóm. Chi phí tương ứng 0,225× và 0,685× mốc tự làm (simulated). Loại quoc_te (1,876×) và doi_tac (0,851×, có điều khoản riêng).",
+    "assignment": {
+      "unit": "staff",
+      "control_share": 0.5,
+      "randomized": true,
+      "stratification": "depot",
+      "seed": 1303448
+    },
+    "rollout": [0.10, 0.25, 0.50],
+    "schedule": {
+      "preflight": "2026-11-27",
+      "four_staff_start": "2026-11-30",
+      "ten_staff_start": "2026-12-14",
+      "primary_cohort_start": "2026-12-28",
+      "primary_cohort_end": "2027-01-10",
+      "timezone": "GMT+7",
+      "note": "Ngày dự kiến, chỉ chuyển bước sau khi đủ điều kiện an toàn. Đo chỉ số chính từ bước 20 nhân viên can thiệp; giữ theo dõi thêm ít nhất 8 ngày cho cửa sổ 24 giờ và 7 ngày."
+    },
+    "primary_metric": {
+      "name": "dong_trong_24h_khong_mo_lai_7_ngay",
+      "baseline": 0.70,
+      "mde": 0.06,
+      "alpha": 0.05,
+      "power": 0.80,
+      "n_per_arm": 859,
+      "raw_requests_per_arm_min": 5980,
+      "requests_per_cluster_target": 299,
+      "design_effect": 6.96,
+      "clusters_per_arm": 20,
+      "analysis": "So sánh theo nhóm được phân ban đầu, kể cả khi nhân viên không mở trợ lý. Ước lượng chênh lệch và khoảng tin cậy 95% có hiệu chỉnh cụm theo nhân viên. Nếu số yêu cầu từng cụm mất cân bằng, kiểm tra lại cỡ mẫu hiệu dụng trước khi kết luận."
+    },
+    "identifiability": {
+      "concurrent_control": "Đối chứng tự xử lý trong cùng thời gian, với cùng tiêu chí nhận yêu cầu và cùng định nghĩa kết quả.",
+      "spillover_risk": "Nhân viên có thể chia sẻ gợi ý trong cùng depot. Giới hạn quyền theo tài khoản, ghi staff_id khi mở trợ lý, và ghi nhận chuyển yêu cầu giữa các nhóm.",
+      "predeclared": "Chốt trước ngày bắt đầu cách chia, chỉ số, ngưỡng, mốc thời gian và phương pháp phân tích.",
+      "cluster_count": "20 nhân viên mỗi nhóm; giám sát số yêu cầu theo từng nhân viên."
+    },
+    "stop_rules": [
+      "NẾU tỷ lệ mở lại 7 ngày của đoàn hệ đủ theo dõi vượt 6% hoặc cao hơn đối chứng ít nhất 2 điểm phần trăm TRONG 3 kỳ theo dõi ngày liên tiếp THÌ Giám đốc vận hành tắt trợ lý trong 30 phút và chuyển sang nhân viên tự làm KHÔNG THÌ chỉ chuyển bước khi đủ dữ liệu an toàn.",
+      "NẾU phát hiện ít nhất 1 ca hoàn tiền trùng TRONG bất kỳ thời điểm nào THÌ Giám đốc vận hành tắt trợ lý trong 30 phút và yêu cầu kế toán đối soát KHÔNG THÌ tiếp tục đối soát mỗi ngày.",
+      "NẾU chi phí biến đổi mỗi việc thành công vượt 8.000 đ TRONG 2 tuần liên tiếp THÌ PM thu hẹp về noi_dia, giới hạn 2 lần chạy và báo Giám đốc vận hành KHÔNG THÌ giữ phạm vi đã duyệt.",
+      "NẾU tỷ lệ sửa hoặc bỏ gợi ý vượt 40% TRONG 1 tuần có ít nhất 30 quyết định xem lại THÌ Trưởng nhóm CSKH giữ nguyên mức rollout và phỏng vấn 5 nhân viên trong 3 ngày KHÔNG THÌ tiếp tục theo dõi và chỉ chuyển bước nếu đủ điều kiện an toàn."
+    ],
+    "interim_looks": "Dùng dữ liệu giữa kỳ để giám sát an toàn, chi phí và mức sử dụng. Chốt chỉ số chính sau khi đủ mẫu và đủ thời gian theo dõi.",
+    "rollback": "Giám đốc vận hành tắt cờ tính năng trong 30 phút. CSKH tiếp quản hàng đợi và kế toán đối soát các giao dịch đang xử lý.",
+    "decision_date": "2027-01-19",
+    "decision_rule": "Giám đốc vận hành chỉ kết luận hiệu quả khi đủ mẫu, đủ theo dõi, khoảng tin cậy 95% của mức tăng nằm trên 0 và các điều kiện an toàn, chi phí đều đạt. Nếu thiếu mẫu hoặc chưa đủ theo dõi, kéo dài theo kế hoạch cập nhật đã duyệt.",
+    "simulated_inputs": [
+      "Chi phí A3 theo loại và các kết quả B1/B4 dùng phut_xem_lai_simulated, phut_lam_lai_simulated.",
+      "B4 dùng 5 phút xem lại, hai giả định làm lại 9 và 15,3 phút.",
+      "Tỷ lệ mở lại 4,25% toàn mẫu và 3,97% trong phạm vi là quan sát từ dữ liệu giả lập."
+    ]
+  }
+}
